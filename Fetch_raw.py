@@ -5,7 +5,7 @@ import pyodbc
 # Function to connect to SQL Server and fetch database names
 def get_database_names(server, username, password):
     try:
-        connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};UID={username};PWD={password};Connection Timeout=60"
+        connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};UID={username};PWD={password};port={1433}"
         conn = pyodbc.connect(connection_string)
         query = "SELECT name FROM sys.databases WHERE database_id > 4;"
         databases = [row.name for row in conn.cursor().execute(query)]
@@ -18,7 +18,7 @@ def get_database_names(server, username, password):
 # Function to connect to SQL Server and fetch table names for a given database
 def get_table_names(server, database, username, password):
     try:
-        connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};UID={username};PWD={password};Connection Timeout=60"
+        connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};UID={username};PWD={password};port={1433}"
         conn = pyodbc.connect(connection_string)
         query = "SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE';"
         tables = [row.table_name for row in conn.cursor().execute(query)]
@@ -31,7 +31,7 @@ def get_table_names(server, database, username, password):
 # Function to connect to SQL Server and fetch data
 def fetch_data(server, database, table, username, password):
     try:
-        connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};UID={username};PWD={password};Connection Timeout=60"
+        connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};UID={username};PWD={password};port={1433}"
         conn = pyodbc.connect(connection_string)
         query = f"SELECT * FROM {table};"
         data = pd.read_sql(query, conn)
